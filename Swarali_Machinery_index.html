@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swarali Machinery Rental</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b2447">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Swarali">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" href="icon-192.png">
+  <style>
+    :root {
+      --navy-dark: #0b2447;
+      --navy-light: #19376d;
+      --accent-orange: #f58220;
+      --card-blue: #1e3e62;
+      --card-orange: #e8630a;
+      --card-green: #2e7d32;
+      --card-red: #c62828;
+      --card-purple: #6a1b9a;
+      --bg-color: #f4f6f9;
+      --text-main: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding-bottom: 90px;
+    }
+    header {
+      background: var(--navy-dark);
+      color: #fff;
+      padding: 18px 25px;
+      border-bottom: 4px solid var(--accent-orange);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { margin: 0 0 5px 0; font-size: 24px; font-weight: 700; }
+    header p { margin: 0; font-size: 13px; color: #cbd5e1; }
+
+    .hidden { display: none !important; }
+
+    /* LOGIN SCREEN STYLES */
+    .login-container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-top: 0;
+      color: var(--navy-dark);
+      font-size: 22px;
+    }
+    .login-container p {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h2.section-title { font-size: 22px; color: var(--navy-dark); margin-top: 0; margin-bottom: 20px; }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      border-radius: 12px;
+      padding: 22px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-card.blue { background: var(--card-blue); }
+    .stat-card.orange { background: var(--card-orange); }
+    .stat-card.green { background: var(--card-green); }
+    .stat-card.red { background: var(--card-red); }
+    .stat-card.purple { background: var(--card-purple); }
+    
+    .stat-card h3 { font-size: 32px; margin: 0 0 5px 0; font-weight: 700; }
+    .stat-card span { font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .btn-action {
+      background: var(--navy-dark);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: background 0.2s;
+    }
+    .btn-action:hover { background: var(--navy-light); }
+
+    .view { display: none; }
+    .view.active { display: block; }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+
+    .nav-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy-dark);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 3px solid var(--accent-orange);
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .nav-item {
+      color: #94a3b8;
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px 12px;
+      transition: color 0.2s;
+    }
+    .nav-item.active, .nav-item:hover { color: #fff; }
+    .nav-item svg { width: 22px; height: 22px; margin-bottom: 3px; fill: currentColor; }
+
+    .report-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    .report-btn {
+      padding: 8px 16px;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #475569;
+    }
+    .report-btn.active {
+      background: var(--navy-dark);
+      color: #fff;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      margin: 6px 0 14px 0;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button.submit-btn {
+      background: var(--navy-dark);
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.submit-btn:hover { background: var(--navy-light); }
+    button.danger-btn { background: #ef4444; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    button.cancel-btn { background: #94a3b8; color: #fff; padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    button.pay-btn { background: #16a34a; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+    button.return-btn { background: #d97706; color: #fff; padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+    button.logout-btn { background: #ef4444; color: #fff; padding: 6px 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .list-item:last-child { border-bottom: none; }
+
+    .reminder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #fff5f5;
+      border-left: 4px solid var(--card-red);
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      width: 94%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal-box h3 { margin-top: 0; color: var(--navy-dark); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
+
+    .search-select-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      max-height: 120px;
+      overflow-y: auto;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+    .search-option-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+    .search-option-item:hover { background: #f1f5f9; }
+    .search-option-item.selected { background: #dcfce7; color: #15803d; font-weight: bold; border-left: 4px solid #16a34a; }
+
+    .selected-cust-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #e0f2fe;
+      border: 1px solid #0284c7;
+      color: #0369a1;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 15px 0;
+    }
+    .cart-table th, .cart-table td {
+      border: 1px solid #e2e8f0;
+      padding: 8px 10px;
+      font-size: 13px;
+      text-align: left;
+    }
+    .cart-table th { background: #f8fafc; color: var(--navy-dark); }
+
+    .asset-return-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: none;
+      z-index: 4000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .toast.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <h1>Swarali Machinery</h1>
+      <p>Rental Management &amp; Billing</p>
+    </div>
+    <button id="logoutBtn" class="logout-btn hidden" onclick="window.firebaseAuth.logout()">Log Out</button>
+  </header>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="login-screen" class="login-container">
+    <h2>Login to Swarali Machinery</h2>
+    <p>Sign in with your email to access multi-device live sync.</p>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email Address" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button type="submit" class="submit-btn" style="width:100%; padding:12px; margin-top:10px;">Log In</button>
+    </form>
+    <p id="login-error" style="color: #ef4444; font-weight: bold; margin-top: 15px;"></p>
+  </div>
+
+  <!-- 2. MAIN APP CONTAINER -->
+  <div id="app-screen" class="hidden">
+    <div class="container">
+
+      <!-- HOME / DASHBOARD VIEW -->
+      <div id="home" class="view active">
+        <h2 class="section-title">Dashboard</h2>
+        
+        <div class="dashboard-grid">
+          <div class="stat-card blue">
+            <h3 id="statCustomers">0</h3>
+            <span>Customers</span>
+          </div>
+          <div class="stat-card blue">
+            <h3 id="statItems">0</h3>
+            <span>Total machinery units</span>
+          </div>
+          <div class="stat-card orange">
+            <h3 id="statRentals">0</h3>
+            <span>Active rentals</span>
+          </div>
+          <div class="stat-card green">
+            <h3 id="statDeposits">₹0</h3>
+            <span>Deposits held</span>
+          </div>
+          <div class="stat-card red">
+            <h3 id="statPending">₹0</h3>
+            <span>Pending payments</span>
+          </div>
+          <div class="stat-card purple">
+            <h3 id="statDamage">₹0</h3>
+            <span>Damage charges</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-action" onclick="openSaleModal()">Create Invoice</button>
+          <button class="btn-action" onclick="switchTab('customers')">Customers</button>
+          <button class="btn-action" onclick="switchTab('items')">Items</button>
+          <button class="btn-action" onclick="switchTab('payments')">Payments</button>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0; color:var(--navy-dark); font-size:18px;">Payment reminders</h3>
+          <div id="reminderList"></div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS VIEW -->
+      <div id="customers" class="view">
+        <h2 class="section-title">Customer Management</h2>
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; gap:10px;">
+            <input type="text" id="custSearch" placeholder="Search customers by name or phone..." style="margin:0; flex:1;">
+            <button class="submit-btn" onclick="openCustModal()">+ Add Customer</button>
+            <button class="submit-btn" style="background:#0f766e;" onclick="document.getElementById('customerExcelFile').click()">Import Excel</button>
+            <input type="file" id="customerExcelFile" accept=".xlsx,.xls,.csv" style="display:none" onchange="importCustomersFromExcel(event)">
+          </div>
+          <p style="font-size:12px;color:#64748b;margin:0 0 10px;">Import your supplied 2026 contact workbook once. Existing customers are matched to avoid duplicate entries.</p>
+          <div id="customerListContainer"></div>
+        </div>
+      </div>
+
+      <!-- ITEMS & PRODUCTS VIEW -->
+      <div id="items" class="view">
+        <h2 class="section-title">Items & Products Catalog</h2>
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; gap:10px; flex-wrap:wrap;">
+            <input type="text" id="itemSearch" placeholder="Search machinery or sales products..." style="margin:0; flex:1; min-width:200px;">
+            <button class="submit-btn" onclick="openItemModal()">+ Add New Item / Product</button>
+          </div>
+          <div id="itemListContainer"></div>
+        </div>
+      </div>
+
+      <!-- SALES / INVOICES VIEW -->
+      <div id="sales" class="view">
+        <h2 class="section-title">Sales & Invoices History</h2>
+        <div style="margin-bottom:20px;">
+          <button class="submit-btn" style="padding:12px 20px;" onclick="openSaleModal()">+ Create New Invoice</button>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0; font-size:18px; color:var(--navy-dark);">Issued Invoices (Active & Partial Returns)</h3>
+          <div id="salesListContainer"></div>
+        </div>
+      </div>
+
+      <!-- PAYMENTS VIEW -->
+      <div id="payments" class="view">
+        <h2 class="section-title">Payments & Ledger</h2>
+        <div class="card">
+          <h3 style="margin-top:0; font-size:18px; color:var(--navy-dark);">Record Due Payment</h3>
+          <form id="recordPaymentForm" onsubmit="handleRecordPayment(event)">
+            <label>Select Customer with Due Balance</label>
+            <select id="payCustSelect" required></select>
+            <label>Payment Amount Received (₹)</label>
+            <input type="number" id="payAmountInput" min="1" required placeholder="Enter amount collected">
+            <button type="submit" class="submit-btn" style="background:#16a34a;">Record Payment</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0; font-size:18px; color:var(--navy-dark);">Payment Collection Log</h3>
+          <div id="paymentHistoryContainer"></div>
+        </div>
+      </div>
+
+      <!-- REPORTS VIEW -->
+      <div id="reports" class="view">
+        <h2 class="section-title">Business Reports & Analytics</h2>
+        
+        <div class="report-tabs" style="flex-wrap:wrap;">
+          <button class="report-btn active" onclick="setReportPeriod('daily', this)">Daily</button>
+          <button class="report-btn" onclick="setReportPeriod('weekly', this)">Weekly</button>
+          <button class="report-btn" onclick="setReportPeriod('monthly', this)">Monthly</button>
+          <button class="report-btn" onclick="setReportPeriod('yearly', this)">Yearly</button>
+          <button class="report-btn" onclick="setReportPeriod('lastyear', this)">Last Year</button>
+          <button class="report-btn" onclick="setReportPeriod('custom', this)">Custom</button>
+        </div>
+
+        <div id="reportYearOpts" class="card" style="display:none; padding:14px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:180px;">
+              <label style="font-size:12px;">Year type</label>
+              <select id="reportBasis" onchange="onReportBasisChange()" style="margin-bottom:0;">
+                <option value="cal">Calendar year (Jan – Dec)</option>
+                <option value="fy">Financial year (Apr – Mar)</option>
+              </select>
+            </div>
+            <div style="flex:1; min-width:180px;" id="reportYearPickBox">
+              <label style="font-size:12px;">Select year</label>
+              <select id="reportYear" onchange="renderReports()" style="margin-bottom:0;"></select>
+            </div>
+          </div>
+        </div>
+
+        <div id="reportCustomOpts" class="card" style="display:none; padding:14px;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:150px;">
+              <label style="font-size:12px;">From date</label>
+              <input type="date" id="reportFrom" onchange="renderReports()" style="margin-bottom:0;">
+            </div>
+            <div style="flex:1; min-width:150px;">
+              <label style="font-size:12px;">To date</label>
+              <input type="date" id="reportTo" onchange="renderReports()" style="margin-bottom:0;">
+            </div>
+          </div>
+        </div>
+
+        <p id="reportRangeText" style="color:#64748b; font-size:13px; margin:0 0 14px 2px;"></p>
+
+        <div class="dashboard-grid">
+          <div class="stat-card blue">
+            <h3 id="reportRevenue">₹0</h3>
+            <span id="reportRevLabel">Daily Revenue</span>
+          </div>
+          <div class="stat-card green">
+            <h3 id="reportCollected">₹0</h3>
+            <span id="reportColLabel">Daily Cash Collected</span>
+          </div>
+          <div class="stat-card red">
+            <h3 id="reportPendingDue">₹0</h3>
+            <span id="reportDueLabel">Daily Pending Balance</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0; font-size:18px; color:var(--navy-dark);" id="reportTitle">Daily Invoices Summary</h3>
+          <div id="reportInvoiceList"></div>
+        </div>
+
+        <div class="card" style="margin-top:30px;">
+          <h3>Database Backup</h3>
+          <p style="color:#64748b;">Save your full customer, inventory, and sales ledger backup to your computer.</p>
+          <button class="submit-btn" onclick="exportBackup()">Export Backup JSON</button>
+          <button class="submit-btn" style="background:#16a34a; margin-left:8px;" onclick="document.getElementById('importFile').click()">Import Backup JSON</button>
+          <input type="file" id="importFile" accept=".json,application/json" style="display:none;" onchange="importBackup(event)">
+          <p style="color:#64748b; font-size:12px; margin:10px 0 0 0;">Import replaces all data on this device with the backup file.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MODAL: ADD / EDIT CUSTOMER -->
+    <div id="custModal" class="modal-overlay">
+      <div class="modal-box">
+        <h3 id="custModalTitle">Add Customer</h3>
+        <form id="custForm" onsubmit="saveCustomer(event)">
+          <input type="hidden" id="custEditId">
+          <label>Customer Name</label>
+          <input type="text" id="custName" required placeholder="Full Name">
+          <label>Phone Number</label>
+          <input type="text" id="custPhone" required placeholder="Mobile Number">
+          <label>Address / Location</label>
+          <input type="text" id="custAddress" placeholder="Address">
+          <div class="modal-actions">
+            <button type="button" class="cancel-btn" onclick="closeModal('custModal')">Cancel</button>
+            <button type="submit" class="submit-btn">Save Customer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT ITEM / PRODUCT -->
+    <div id="itemModal" class="modal-overlay">
+      <div class="modal-box">
+        <h3 id="itemModalTitle">Add Item / Service</h3>
+        <form id="itemForm" onsubmit="saveItem(event)">
+          <input type="hidden" id="itemEditId">
+          <label>Item Name</label>
+          <input type="text" id="itemName" required placeholder="e.g. 7 Kg Breaker or 4 Inch Blade">
+          <label>Item Category</label>
+          <select id="itemType">
+            <option value="rental">Returnable Machinery Service (Rental)</option>
+            <option value="sale">Non-Returnable Retail Product (Sale Item)</option>
+          </select>
+          <label>Stock Quantity</label>
+          <input type="number" id="itemQty" value="1" min="1" required>
+          <label>Rate / Price (₹)</label>
+          <input type="number" id="itemRate" required placeholder="Daily Rent Rate or Selling Price">
+          <div class="modal-actions">
+            <button type="button" class="cancel-btn" onclick="closeModal('itemModal')">Cancel</button>
+            <button type="submit" class="submit-btn">Save Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- INVOICE MODAL -->
+    <div id="saleModal" class="modal-overlay">
+      <div class="modal-box">
+        <h3>Create New Invoice</h3>
+        <form id="invoiceForm" onsubmit="submitInvoice(event)">
+          
+          <label>1. Select Single Customer</label>
+          <div id="selectedCustDisplay" style="display:none;" class="selected-cust-badge">
+            <span id="selectedCustNameText"></span>
+            <button type="button" class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="clearSelectedCustomer()">Change</button>
+          </div>
+          
+          <div id="custSearchSection">
+            <input type="text" id="saleCustSearch" placeholder="Type customer name or phone..." oninput="renderSaleCustomerOptions()">
+            <div id="saleCustOptionsBox" class="search-select-box"></div>
+          </div>
+          <input type="hidden" id="selectedCustId" required>
+
+          <hr style="border:0; border-top:1px solid #e2e8f0; margin:15px 0;">
+
+          <label>2. Add Items / Products / Services</label>
+          <input type="text" id="saleItemSearch" placeholder="Type item name (Blade, Breaker)..." oninput="renderSaleItemOptions()">
+          <div id="saleItemOptionsBox" class="search-select-box"></div>
+          <input type="hidden" id="selectedItemId">
+
+          <div style="display:flex; gap:10px; align-items:flex-end; margin-bottom:15px;">
+            <div style="flex:1;">
+              <label style="font-size:12px;">Qty</label>
+              <input type="number" id="cartItemQty" value="1" min="1" style="margin:0;">
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:12px;">Rate (₹)</label>
+              <input type="number" id="cartItemRate" placeholder="Price" style="margin:0;">
+            </div>
+            <button type="button" class="submit-btn" style="background:#16a34a; padding:10px 14px;" onclick="addItemToInvoiceCart()">+ Add Item</button>
+          </div>
+
+          <label>Selected Invoice Items:</label>
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="cartTableBody">
+              <tr><td colspan="5" style="text-align:center; color:#94a3b8;">No items added to bill yet.</td></tr>
+            </tbody>
+          </table>
+
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+              <label>Final Agreed Amount (₹) — editable</label>
+              <input type="number" id="saleBillAmt" min="0" step="0.01" oninput="this.dataset.userEdited='1'; calcBalanceDisplay()" style="background:#fff7ed; font-weight:bold;">
+              <small style="color:#64748b;">You may apply a relationship discount by editing this final amount. Item rates remain unchanged.</small>
+            </div>
+            <div style="flex:1;">
+              <label>Advance Paid (₹)</label>
+              <input type="number" id="saleAdvanceAmt" value="0" min="0" oninput="calcBalanceDisplay()">
+            </div>
+          </div>
+
+          <p style="font-weight:bold; font-size:16px; color:var(--navy-dark); margin:5px 0 15px 0;" id="invoiceBalanceDisplay">Balance Due: ₹0</p>
+
+          <div class="modal-actions">
+            <button type="button" class="cancel-btn" onclick="closeModal('saleModal')">Cancel</button>
+            <button type="submit" class="submit-btn">Complete & Save Invoice</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: ALL ASSETS RETURN LIST -->
+    <div id="returnModal" class="modal-overlay">
+      <div class="modal-box">
+        <h3>Receive Returned Assets</h3>
+        <p id="returnCustInfo" style="color:#64748b; margin-top:0; font-size:14px; margin-bottom:15px;"></p>
+        
+        <div id="returnAssetsContainer" style="max-height:350px; overflow-y:auto; margin-bottom:15px;"></div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" onclick="closeModal('returnModal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-bottom">
+      <button class="nav-item active" onclick="switchTab('home', this)">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Home
+      </button>
+      <button class="nav-item" onclick="switchTab('customers', this)">
+        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        Customers
+      </button>
+      <button class="nav-item" onclick="switchTab('items', this)">
+        <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+        Items
+      </button>
+      <button class="nav-item" onclick="switchTab('sales', this)">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        Sales
+      </button>
+      <button class="nav-item" onclick="switchTab('payments', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        Payments
+      </button>
+      <button class="nav-item" onclick="switchTab('reports', this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        Reports
+      </button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast">Action successful</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    const KEY = "swaraliRentalPWA_v1";
+
+    const STARTER_PRODUCTS = [
+      ["Tape 30M", 50, "rental"], ["Compressor Machine", 400, "rental"], ["7 Kg Breaker", 400, "rental"], 
+      ["Level Batala", 20, "rental"], ["4 Inch Blade", 150, "sale"], ["Drill Bit 6mm", 50, "sale"], ["11 kg Breaker", 500, "rental"]
+    ];
+
+    const STARTER_CUSTOMERS = [];
+
+    let db = loadDB();
+    let currentReportPeriod = "daily";
+    let invoiceCart = [];
+
+    function loadDB() {
+      let data;
+      try { data = JSON.parse(localStorage.getItem(KEY)) || { customers: [], items: [], rentals: [], sales: [], payments: [] }; }
+      catch { data = { customers: [], items: [], rentals: [], sales: [], payments: [] }; }
+      data.customers ||= []; data.items ||= []; data.rentals ||= []; data.sales ||= []; data.payments ||= [];
+      
+      if(data.items.length === 0) {
+        data.items = STARTER_PRODUCTS.map(([name, rate, type], idx) => ({ id: "item-"+idx, name, qty: 5, rate, type }));
+      }
+      return data;
+    }
+
+    function saveDB() { 
+      localStorage.setItem(KEY, JSON.stringify(db)); 
+      renderAll(); 
+    }
+
+    function showToast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2500); }
+
+    function switchTab(tabId, el) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+      
+      document.getElementById(tabId).classList.add("active");
+      
+      if(el) {
+        el.classList.add("active");
+      } else {
+        document.querySelectorAll(".nav-item").forEach(btn => {
+          if(btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(tabId)) btn.classList.add("active");
+        });
+      }
+      window.scrollTo(0,0);
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove("active");
+    }
+
+
+    // Import the user's 2026 contact directory. Matches by normalized phone first,
+    // then by exact case-insensitive name. Existing customer IDs and invoice history remain intact.
+    function normalizeCustomerImportHeader(value) {
+      return String(value || "").trim().toLowerCase().replace(/[\s_\-().]/g, "");
+    }
+
+    async function importCustomersFromExcel(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const button = document.querySelector("#customers button[onclick*=\"customerExcelFile\"]");
+      const originalText = button ? button.textContent : "Import Excel";
+      if (button) { button.disabled = true; button.textContent = "Reading file..."; }
+
+      try {
+        if (!window.XLSX) throw new Error("Excel reader did not load. Check internet access and refresh the app.");
+        const workbook = window.XLSX.read(await file.arrayBuffer(), { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = window.XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false });
+        if (!rows.length) throw new Error("The selected worksheet is empty.");
+
+        const headerMap = {};
+        Object.keys(rows[0]).forEach(h => headerMap[normalizeCustomerImportHeader(h)] = h);
+        const findCol = names => {
+          for (const n of names) if (headerMap[n]) return headerMap[n];
+          return null;
+        };
+        const nameCol = findCol(["name", "customername", "fullname", "contactname"]);
+        const phoneCol = findCol(["contactnumber1", "contact1", "phone", "mobilenumber", "mobile", "phonenumber"]);
+        const phone2Col = findCol(["contactnumber2", "contact2", "phone2", "mobile2", "alternatemobile", "alternatenumber"]);
+        const addressCol = findCol(["address", "customeraddress", "location"]);
+        if (!nameCol) throw new Error("Name column is required in the Excel file.");
+
+        const knownNames = new Set(db.customers.map(c => String(c.name || "").trim().toLowerCase()).filter(Boolean));
+        const knownPhones = new Set(db.customers.map(c => String(c.phone || "").replace(/\D/g, "").slice(-10)).filter(Boolean));
+        const additions = [];
+        let skipped = 0;
+
+        rows.forEach((row, index) => {
+          const name = String(row[nameCol] || "").trim();
+          if (!name) { skipped++; return; }
+          const phone = phoneCol ? String(row[phoneCol] || "").trim() : "";
+          const phone2 = phone2Col ? String(row[phone2Col] || "").trim() : "";
+          const digits = phone.replace(/\D/g, "").slice(-10);
+          const key = name.toLowerCase();
+          if (knownNames.has(key) || (digits && knownPhones.has(digits))) { skipped++; return; }
+
+          additions.push({
+            id: "excel-" + Date.now() + "-" + index,
+            name,
+            phone,
+            phone2,
+            address: addressCol ? String(row[addressCol] || "").trim() : "",
+            contactSource: file.name
+          });
+          knownNames.add(key);
+          if (digits) knownPhones.add(digits);
+        });
+
+        if (!additions.length) {
+          showToast("No new customers found. Blank and duplicate rows were skipped.");
+          return;
+        }
+        if (!confirm(`File: ${file.name}\nNew customers: ${additions.length}\nSkipped blank/duplicate rows: ${skipped}\n\nImport these customers?`)) return;
+
+        db.customers = [...additions, ...db.customers];
+        saveDB();
+
+        if (window.firebaseDB?.saveItem) {
+          const batchSize = 25;
+          for (let i = 0; i < additions.length; i += batchSize) {
+            const group = additions.slice(i, i + batchSize);
+            await Promise.all(group.map(c => window.firebaseDB.saveItem("customers", c.id, c)));
+            if (button) button.textContent = `Uploading ${Math.min(i + group.length, additions.length)}/${additions.length}`;
+          }
+          showToast(`Imported ${additions.length} customers. ${skipped} duplicates/blank rows skipped.`);
+        } else {
+          showToast(`Imported ${additions.length} customers on this device. Cloud sync is not connected.`);
+        }
+      } catch (err) {
+        console.error("Excel import failed:", err);
+        alert("Import failed: " + (err.message || err));
+      } finally {
+        event.target.value = "";
+        if (button) { button.disabled = false; button.textContent = originalText; }
+      }
+    }
+
+    // Customer Actions
+    function openCustModal(id = null) {
+      document.getElementById("custForm").reset();
+      document.getElementById("custEditId").value = "";
+      if(id) {
+        const c = db.customers.find(x => x.id === id);
+        if(c) {
+          document.getElementById("custEditId").value = c.id;
+          document.getElementById("custName").value = c.name;
+          document.getElementById("custPhone").value = c.phone;
+          document.getElementById("custAddress").value = c.address || "";
+          document.getElementById("custModalTitle").textContent = "Edit Customer";
+        }
+      } else {
+        document.getElementById("custModalTitle").textContent = "Add Customer";
+      }
+      document.getElementById("custModal").classList.add("active");
+    }
+
+    function saveCustomer(e) {
+      e.preventDefault();
+      const id = document.getElementById("custEditId").value || Date.now().toString();
+      const c = {
+        id,
+        name: document.getElementById("custName").value,
+        phone: document.getElementById("custPhone").value,
+        address: document.getElementById("custAddress").value
+      };
+      const idx = db.customers.findIndex(x => x.id === id);
+      if(idx >= 0) db.customers[idx] = c; else db.customers.unshift(c);
+      
+      // Save to Firebase Cloud DB if connected
+      if (window.firebaseDB) window.firebaseDB.saveItem('customers', id, c);
+      
+      closeModal("custModal");
+      saveDB();
+      showToast("Customer saved successfully!");
+    }
+
+    function deleteCust(id) {
+      if(confirm("Are you sure you want to delete this customer?")) {
+        db.customers = db.customers.filter(x => x.id !== id);
+        if (window.firebaseDB) window.firebaseDB.removeItem('customers', id);
+        saveDB();
+        showToast("Customer deleted.");
+      }
+    }
+
+    // Item Actions
+    function openItemModal(id = null) {
+      document.getElementById("itemForm").reset();
+      document.getElementById("itemEditId").value = "";
+      document.getElementById("itemType").value = "rental";
+      if(id) {
+        const i = db.items.find(x => x.id === id);
+        if(i) {
+          document.getElementById("itemEditId").value = i.id;
+          document.getElementById("itemName").value = i.name;
+          document.getElementById("itemType").value = i.type || "rental";
+          document.getElementById("itemQty").value = i.qty;
+          document.getElementById("itemRate").value = i.rate;
+          document.getElementById("itemModalTitle").textContent = "Edit Item";
+        }
+      } else {
+        document.getElementById("itemModalTitle").textContent = "Add Item / Service";
+      }
+      document.getElementById("itemModal").classList.add("active");
+    }
+
+    function saveItem(e) {
+      e.preventDefault();
+      const id = document.getElementById("itemEditId").value || Date.now().toString();
+      const i = {
+        id,
+        name: document.getElementById("itemName").value,
+        type: document.getElementById("itemType").value,
+        qty: Number(document.getElementById("itemQty").value),
+        rate: Number(document.getElementById("itemRate").value)
+      };
+      const idx = db.items.findIndex(x => x.id === id);
+      if(idx >= 0) db.items[idx] = i; else db.items.unshift(i);
+
+      if (window.firebaseDB) window.firebaseDB.saveItem('items', id, i);
+
+      closeModal("itemModal");
+      saveDB();
+      showToast("Item / product saved!");
+    }
+
+    function deleteItem(id) {
+      if(confirm("Are you sure you want to delete this item?")) {
+        db.items = db.items.filter(x => x.id !== id);
+        if (window.firebaseDB) window.firebaseDB.removeItem('items', id);
+        saveDB();
+        showToast("Item deleted.");
+      }
+    }
+
+    // INVOICE SELECTION
+    function openSaleModal() {
+      if(!db.customers.length) {
+        showToast("Please add at least one customer first.");
+        return;
+      }
+      if(!db.items.length) {
+        showToast("Please add items to your catalog first.");
+        return;
+      }
+
+      invoiceCart = [];
+      document.getElementById("saleCustSearch").value = "";
+      document.getElementById("saleItemSearch").value = "";
+      document.getElementById("selectedCustId").value = "";
+      document.getElementById("selectedItemId").value = "";
+      document.getElementById("saleBillAmt").value = "0";
+      document.getElementById("saleBillAmt").dataset.userEdited = ""; 
+      document.getElementById("saleBillAmt").dataset.gross = "0";
+      document.getElementById("saleAdvanceAmt").value = "0";
+      document.getElementById("cartItemQty").value = "1";
+      document.getElementById("cartItemRate").value = "";
+
+      clearSelectedCustomer();
+      renderSaleCustomerOptions();
+      renderSaleItemOptions();
+      renderCartTable();
+      calcBalanceDisplay();
+
+      document.getElementById("saleModal").classList.add("active");
+    }
+
+    function renderSaleCustomerOptions() {
+      const q = document.getElementById("saleCustSearch").value.toLowerCase();
+      const matches = db.customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q)).slice(0, 50);
+      const box = document.getElementById("saleCustOptionsBox");
+      
+      box.innerHTML = matches.map(c => `
+        <div class="search-option-item" data-custid="${c.id}" data-custname="${c.name}" data-custphone="${c.phone}">
+          <strong>${c.name}</strong> (${c.phone})
+        </div>
+      `).join("") || '<div style="padding:10px; color:#64748b; text-align:center;">No matching customers</div>';
+
+      box.querySelectorAll(".search-option-item").forEach(el => {
+        el.addEventListener("click", () => {
+          const cid = el.getAttribute("data-custid");
+          const cname = el.getAttribute("data-custname");
+          const cphone = el.getAttribute("data-custphone");
+          selectSingleCustomer(cid, cname, cphone);
+        });
+      });
+    }
+
+    function selectSingleCustomer(id, name, phone) {
+      document.getElementById("selectedCustId").value = id;
+      document.getElementById("selectedCustNameText").textContent = `Selected: ${name} (${phone})`;
+      document.getElementById("selectedCustDisplay").style.display = "flex";
+      document.getElementById("custSearchSection").style.display = "none";
+      showToast(`Customer "${name}" selected.`);
+    }
+
+    function clearSelectedCustomer() {
+      document.getElementById("selectedCustId").value = "";
+      document.getElementById("selectedCustDisplay").style.display = "none";
+      document.getElementById("custSearchSection").style.display = "block";
+      document.getElementById("saleCustSearch").value = "";
+      renderSaleCustomerOptions();
+    }
+
+    function renderSaleItemOptions() {
+      const q = document.getElementById("saleItemSearch").value.toLowerCase();
+      const matches = db.items.filter(i => i.name.toLowerCase().includes(q));
+      const box = document.getElementById("saleItemOptionsBox");
+      const selectedId = document.getElementById("selectedItemId").value;
+      
+      box.innerHTML = matches.map(i => `
+        <div class="search-option-item ${selectedId === i.id ? 'selected' : ''}" data-itemid="${i.id}" data-rate="${i.rate}">
+          <strong>${i.name}</strong> [${i.type === 'sale' ? 'Product' : 'Service'}] — ₹${i.rate}
+        </div>
+      `).join("") || '<div style="padding:10px; color:#64748b; text-align:center;">No matching items found</div>';
+
+      box.querySelectorAll(".search-option-item").forEach(el => {
+        el.addEventListener("click", () => {
+          const iid = el.getAttribute("data-itemid");
+          const rate = el.getAttribute("data-rate");
+          document.getElementById("selectedItemId").value = iid;
+          document.getElementById("cartItemRate").value = rate;
+          renderSaleItemOptions();
+        });
+      });
+
+      if(matches.length && !selectedId) {
+        document.getElementById("selectedItemId").value = matches[0].id;
+        document.getElementById("cartItemRate").value = matches[0].rate;
+      }
+    }
+
+    function addItemToInvoiceCart() {
+      const iid = document.getElementById("selectedItemId").value;
+      const qty = Number(document.getElementById("cartItemQty").value || 1);
+      const rate = Number(document.getElementById("cartItemRate").value || 0);
+
+      if(!iid) {
+        showToast("Please select an item first!");
+        return;
+      }
+
+      const itemObj = db.items.find(x => x.id === iid);
+      if(!itemObj) return;
+
+      invoiceCart.push({
+        id: itemObj.id,
+        name: itemObj.name,
+        type: itemObj.type || 'rental',
+        qty,
+        returnedQty: 0,
+        rate,
+        total: qty * rate
+      });
+
+      renderCartTable();
+      showToast(`${itemObj.name} added to invoice!`);
+    }
+
+    function removeCartItem(idx) {
+      invoiceCart.splice(idx, 1);
+      renderCartTable();
+    }
+
+    function renderCartTable() {
+      const tbody = document.getElementById("cartTableBody");
+      let grandTotal = 0;
+
+      if(!invoiceCart.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">No items added to bill yet.</td></tr>`;
+      } else {
+        tbody.innerHTML = invoiceCart.map((item, idx) => {
+          grandTotal += item.total;
+          return `
+            <tr>
+              <td><strong>${item.name}</strong></td>
+              <td>${item.qty}</td>
+              <td>₹${item.rate}</td>
+              <td><strong>₹${item.total.toLocaleString("en-IN")}</strong></td>
+              <td><button type="button" class="danger-btn" onclick="removeCartItem(${idx})">✕</button></td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      const billInput = document.getElementById("saleBillAmt");
+      const previousGross = Number(billInput.dataset.gross || 0);
+      const currentValue = Number(billInput.value || 0);
+      if (!billInput.dataset.userEdited || currentValue === previousGross) billInput.value = grandTotal;
+      billInput.dataset.gross = String(grandTotal);
+      calcBalanceDisplay();
+    }
+
+    function calcBalanceDisplay() {
+      const bill = Number(document.getElementById("saleBillAmt").value || 0);
+      const adv = Number(document.getElementById("saleAdvanceAmt").value || 0);
+      const bal = Math.max(0, bill - adv);
+      document.getElementById("invoiceBalanceDisplay").textContent = "Balance Due: ₹" + bal.toLocaleString("en-IN");
+    }
+
+    function getInvoiceItemSummary(s) {
+      if(s.items && Array.isArray(s.items) && s.items.length) {
+        return s.items.map(i => {
+          const pending = i.qty - (i.returnedQty || 0);
+          return `${i.name} (Qty: ${i.qty}${pending > 0 ? ', Pending: ' + pending : ', Returned'})`;
+        }).join("; ");
+      }
+      return s.itemName || "General Rental";
+    }
+
+    function submitInvoice(e) {
+      e.preventDefault();
+      const custId = document.getElementById("selectedCustId").value;
+      const billAmt = Number(document.getElementById("saleBillAmt").value || 0);
+      const advAmt = Number(document.getElementById("saleAdvanceAmt").value || 0);
+
+      if(!custId) {
+        showToast("Please select a customer!");
+        return;
+      }
+      if(!invoiceCart.length) {
+        showToast("Please add at least one item to the invoice bill!");
+        return;
+      }
+
+      const custObj = db.customers.find(x => x.id === custId);
+      const summaryText = invoiceCart.map(i => `${i.name} (x${i.qty})`).join(", ");
+
+      const newInv = {
+        id: Date.now().toString(),
+        customerId: custObj ? custObj.id : "",
+        customerName: custObj ? custObj.name : "Customer",
+        customerPhone: custObj ? custObj.phone : "",
+        itemName: summaryText,
+        items: JSON.parse(JSON.stringify(invoiceCart)),
+        billAmount: billAmt,
+        grossAmount: invoiceCart.reduce((sum, item) => sum + Number(item.total || 0), 0),
+        discountAmount: Math.max(0, invoiceCart.reduce((sum, item) => sum + Number(item.total || 0), 0) - billAmt),
+        advanceAmount: advAmt,
+        dueAmount: Math.max(0, billAmt - advAmt),
+        total: billAmt,
+        status: "active",
+        date: new Date().toLocaleDateString("en-CA")
+      };
+
+      db.sales.unshift(newInv);
+      if (window.firebaseDB) window.firebaseDB.saveItem('invoices', newInv.id, newInv);
+
+      closeModal("saleModal");
+      saveDB();
+      showToast("Invoice completed & saved!");
+      switchTab('sales');
+    }
+
+    // RETURN ASSETS
+    function openReturnModal(invoiceId) {
+      const inv = db.sales.find(s => s.id === invoiceId);
+      if(!inv) return;
+
+      document.getElementById("returnCustInfo").textContent = `Customer: ${inv.customerName} | Invoice Date: ${inv.date}`;
+      const container = document.getElementById("returnAssetsContainer");
+
+      const items = inv.items || [];
+      if(!items.length) {
+        container.innerHTML = `<p style="text-align:center; color:#64748b;">No items found on this invoice.</p>`;
+      } else {
+        container.innerHTML = items.map((i, idx) => {
+          const pending = i.qty - (i.returnedQty || 0);
+          const isFullyReturned = pending <= 0;
+
+          return `
+            <div class="asset-return-row">
+              <div>
+                <strong>${i.name}</strong><br>
+                <small style="color:#64748b;">Rented Qty: ${i.qty} | Already Returned: ${i.returnedQty || 0} | <strong>Pending: ${pending}</strong></small>
+                ${(i.returnEvents || []).map(ev => `<div style="font-size:12px;color:#166534;margin-top:4px;">Returned: ${ev.qty} Qty · ${prettyDate(ev.returnDate)} · ${ev.rentalDays} day(s) · Calculated rent: ₹${Number(ev.calculatedRentalAmount || 0).toLocaleString("en-IN")}</div>`).join("")}
+              </div>
+              <div>
+                ${isFullyReturned 
+                  ? `<span style="color:#16a34a; font-weight:bold; font-size:13px;">Returned ✓</span>` 
+                  : `<button type="button" class="return-btn" onclick="returnSingleAsset('${inv.id}', '${i.id}', 1)">Return 1 Qty</button>
+                     ${pending > 1 ? `<button type="button" class="return-btn" style="background:#0284c7; margin-left:5px;" onclick="returnSingleAsset('${inv.id}', '${i.id}', ${pending})">Return All (${pending})</button>` : ''}`
+                }
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("returnModal").classList.add("active");
+    }
+
+    function returnSingleAsset(invoiceId, itemId, qtyToReturn) {
+      const inv = db.sales.find(s => s.id === invoiceId);
+      if(!inv) return;
+
+      const itemEntry = (inv.items || []).find(i => i.id === itemId);
+      if(!itemEntry) return;
+
+      const pendingQty = itemEntry.qty - (itemEntry.returnedQty || 0);
+      if(qtyToReturn > pendingQty) {
+        showToast("Cannot return more than pending quantity!");
+        return;
+      }
+
+      const returnedAt = new Date();
+      const returnDate = isoDate(returnedAt);
+      const startDate = inv.date || isoDate(returnedAt);
+      const start = new Date(startDate + "T00:00:00");
+      const end = new Date(returnDate + "T00:00:00");
+      const rentalDays = Math.max(1, Math.floor((end - start) / 86400000) + 1);
+
+      // Keep a permanent history entry for each partial/full return.
+      itemEntry.returnEvents ||= [];
+      itemEntry.returnEvents.push({
+        qty: qtyToReturn,
+        returnDate,
+        returnDateTime: returnedAt.toISOString(),
+        rentalDays,
+        dailyRate: Number(itemEntry.rate || 0),
+        calculatedRentalAmount: Number(itemEntry.rate || 0) * rentalDays * qtyToReturn
+      });
+      itemEntry.returnedQty = (itemEntry.returnedQty || 0) + qtyToReturn;
+
+      // Update Catalog Stock
+      const catalogItem = db.items.find(i => i.id === itemId);
+      if(catalogItem) {
+        catalogItem.qty = Number(catalogItem.qty || 0) + qtyToReturn;
+        if (window.firebaseDB) window.firebaseDB.saveItem('items', catalogItem.id, catalogItem);
+      }
+
+      const allReturned = inv.items.every(i => (i.qty - (i.returnedQty || 0)) === 0);
+      if(allReturned) inv.status = "completed";
+
+      if (window.firebaseDB) window.firebaseDB.saveItem('invoices', inv.id, inv);
+
+      saveDB();
+      showToast(`Returned ${qtyToReturn} x ${itemEntry.name}!`);
+      openReturnModal(invoiceId);
+    }
+
+    // PAYMENTS
+    function handleRecordPayment(e) {
+      e.preventDefault();
+      const custId = document.getElementById("payCustSelect").value;
+      const payAmount = Number(document.getElementById("payAmountInput").value || 0);
+
+      if(!custId || payAmount <= 0) {
+        showToast("Please select a customer and enter a valid amount!");
+        return;
+      }
+
+      const pendingSales = db.sales.filter(s => s.customerId === custId && (s.dueAmount > 0 || (s.billAmount && s.billAmount > (s.advanceAmount || 0))));
+      let remainingPayment = payAmount;
+
+      pendingSales.forEach(s => {
+        const currentDue = s.dueAmount !== undefined ? s.dueAmount : (s.billAmount - s.advanceAmount);
+        if(remainingPayment > 0 && currentDue > 0) {
+          const payTowardsThis = Math.min(remainingPayment, currentDue);
+          s.advanceAmount = (s.advanceAmount || 0) + payTowardsThis;
+          s.dueAmount = Math.max(0, currentDue - payTowardsThis);
+          remainingPayment -= payTowardsThis;
+          if (window.firebaseDB) window.firebaseDB.saveItem('invoices', s.id, s);
+        }
+      });
+
+      const custObj = db.customers.find(x => x.id === custId);
+      const payRec = {
+        id: Date.now().toString(),
+        customerId: custId,
+        customerName: custObj ? custObj.name : "Customer",
+        amount: payAmount,
+        date: new Date().toLocaleDateString("en-CA")
+      };
+
+      db.payments.unshift(payRec);
+      if (window.firebaseDB) window.firebaseDB.saveItem('payments', payRec.id, payRec);
+
+      document.getElementById("recordPaymentForm").reset();
+      saveDB();
+      showToast("Payment recorded successfully!");
+    }
+
+    // REPORTS
+    const pad2 = n => String(n).padStart(2, "0");
+    const isoDate = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+    const fyStartYear = d => d.getMonth() >= 3 ? d.getFullYear() : d.getFullYear() - 1;
+    const PERIOD_NAMES = { daily: "Daily", weekly: "Weekly", monthly: "Monthly", yearly: "Yearly", lastyear: "Last Year", custom: "Custom" };
+    const BASIS_KEY = "swaraliReportBasis";
+
+    function prettyDate(iso) {
+      const [y, m, d] = iso.split("-").map(Number);
+      return `${pad2(d)}-${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m - 1]}-${y}`;
+    }
+    function currentBaseYear() {
+      const now = new Date();
+      return document.getElementById("reportBasis").value === "fy" ? fyStartYear(now) : now.getFullYear();
+    }
+    function yearLabel(y) {
+      return document.getElementById("reportBasis").value === "fy" ? `FY ${y}-${String(y + 1).slice(2)}` : `${y}`;
+    }
+    function yearRange(y) {
+      return document.getElementById("reportBasis").value === "fy"
+        ? { from: `${y}-04-01`, to: `${y + 1}-03-31` }
+        : { from: `${y}-01-01`, to: `${y}-12-31` };
+    }
+    function populateYearOptions() {
+      const sel = document.getElementById("reportYear");
+      const keep = sel.value;
+      const base = currentBaseYear();
+      let html = "";
+      for (let y = base; y >= base - 5; y--) html += `<option value="${y}">${yearLabel(y)}</option>`;
+      sel.innerHTML = html;
+      sel.value = [...sel.options].some(o => o.value === keep) ? keep : String(base);
+    }
+    function onReportBasisChange() {
+      try { localStorage.setItem(BASIS_KEY, document.getElementById("reportBasis").value); } catch {}
+      populateYearOptions();
+      document.getElementById("reportYear").value = String(currentBaseYear());
+      renderReports();
+    }
+
+    function getReportRange() {
+      const t = new Date();
+      const todayStr = isoDate(t);
+      const p = currentReportPeriod;
+      if (p === "daily") return { from: todayStr, to: todayStr, text: `Today (${prettyDate(todayStr)})` };
+      if (p === "weekly") {
+        const f = isoDate(new Date(t.getFullYear(), t.getMonth(), t.getDate() - 6));
+        return { from: f, to: todayStr, text: `Last 7 days: ${prettyDate(f)} to ${prettyDate(todayStr)}` };
+      }
+      if (p === "monthly") {
+        const f = isoDate(new Date(t.getFullYear(), t.getMonth(), 1));
+        const l = isoDate(new Date(t.getFullYear(), t.getMonth() + 1, 0));
+        return { from: f, to: l, text: `This month: ${prettyDate(f)} to ${prettyDate(l)}` };
+      }
+      if (p === "yearly" || p === "lastyear") {
+        const y = p === "lastyear" ? currentBaseYear() - 1 : Number(document.getElementById("reportYear").value);
+        const r = yearRange(y);
+        const type = document.getElementById("reportBasis").value === "fy" ? "Financial year" : "Calendar year";
+        return { ...r, text: `${type} ${yearLabel(y)}: ${prettyDate(r.from)} to ${prettyDate(r.to)}` };
+      }
+      let f = document.getElementById("reportFrom").value || todayStr;
+      let l = document.getElementById("reportTo").value || todayStr;
+      if (f > l) [f, l] = [l, f];
+      return { from: f, to: l, text: `Custom: ${prettyDate(f)} to ${prettyDate(l)}` };
+    }
+
+    function setReportPeriod(period, btn) {
+      currentReportPeriod = period;
+      document.querySelectorAll(".report-btn").forEach(b => b.classList.remove("active"));
+      if(btn) btn.classList.add("active");
+      if(period === "yearly") document.getElementById("reportYear").value = String(currentBaseYear());
+      document.getElementById("reportYearOpts").style.display = (period === "yearly" || period === "lastyear") ? "block" : "none";
+      document.getElementById("reportYearPickBox").style.display = period === "yearly" ? "block" : "none";
+      document.getElementById("reportCustomOpts").style.display = period === "custom" ? "block" : "none";
+      if(period === "custom") {
+        const td = isoDate(new Date());
+        if(!document.getElementById("reportFrom").value) document.getElementById("reportFrom").value = td.slice(0, 8) + "01";
+        if(!document.getElementById("reportTo").value) document.getElementById("reportTo").value = td;
+      }
+      renderReports();
+    }
+
+    function renderReports() {
+      const range = getReportRange();
+      document.getElementById("reportRangeText").textContent = "Showing: " + range.text;
+
+      const filteredSales = db.sales.filter(s => s.date && s.date >= range.from && s.date <= range.to);
+
+      const totalRevenue = filteredSales.reduce((sum, s) => sum + (s.billAmount || s.total || 0), 0);
+      const totalCollected = filteredSales.reduce((sum, s) => sum + (s.advanceAmount || 0), 0);
+      const totalDue = filteredSales.reduce((sum, s) => {
+        const due = s.dueAmount !== undefined ? s.dueAmount : ((s.billAmount || s.total) - (s.advanceAmount || 0));
+        return sum + Math.max(0, due);
+      }, 0);
+
+      const capitalizedLabel = PERIOD_NAMES[currentReportPeriod];
+      
+      document.getElementById("reportRevLabel").textContent = `${capitalizedLabel} Revenue`;
+      document.getElementById("reportColLabel").textContent = `${capitalizedLabel} Cash Collected`;
+      document.getElementById("reportDueLabel").textContent = `${capitalizedLabel} Pending Balance`;
+      document.getElementById("reportTitle").textContent = `${capitalizedLabel} Invoices Summary (${filteredSales.length})`;
+
+      document.getElementById("reportRevenue").textContent = "₹" + totalRevenue.toLocaleString("en-IN");
+      document.getElementById("reportCollected").textContent = "₹" + totalCollected.toLocaleString("en-IN");
+      document.getElementById("reportPendingDue").textContent = "₹" + totalDue.toLocaleString("en-IN");
+
+      const reportList = document.getElementById("reportInvoiceList");
+      if(!filteredSales.length) {
+        reportList.innerHTML = `<p style="padding:15px; color:#64748b; text-align:center;">No invoices recorded for this period.</p>`;
+      } else {
+        reportList.innerHTML = filteredSales.map(s => {
+          const due = s.dueAmount !== undefined ? s.dueAmount : ((s.billAmount || s.total) - (s.advanceAmount || 0));
+          const summary = getInvoiceItemSummary(s);
+          return `
+            <div class="list-item">
+              <div>
+                <strong>${s.customerName} — ${summary}</strong><br>
+                <small style="color:#64748b;">Bill: ₹${s.billAmount || s.total} · Paid: ₹${s.advanceAmount || 0} · Date: ${s.date}</small>
+              </div>
+              <div style="text-align:right;">
+                <strong style="color:var(--navy-dark); font-size:15px;">₹${(s.billAmount || s.total).toLocaleString("en-IN")}</strong><br>
+                <small style="color:${due > 0 ? 'var(--card-red)' : 'var(--card-green)'}; font-weight:bold;">
+                  ${due > 0 ? 'Due: ₹' + due : 'Paid'}
+                </small>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `swarali-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      showToast("Backup file downloaded!");
+    }
+
+    function importBackup(e) {
+      const file = e.target.files[0];
+      e.target.value = "";
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if(!data || !Array.isArray(data.customers) || !Array.isArray(data.items) || !Array.isArray(data.sales)) throw new Error("bad");
+          if(!confirm(`Replace ALL data on this device with the backup?\n\nCustomers: ${data.customers.length}\nItems: ${data.items.length}\nInvoices: ${data.sales.length}`)) return;
+          data.payments ||= []; data.rentals ||= [];
+          db = data;
+          saveDB();
+          showToast("Backup imported successfully!");
+        } catch {
+          alert("This file is not a valid Swarali backup.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function renderAll() {
+      document.getElementById("statCustomers").textContent = db.customers.length;
+      document.getElementById("statItems").textContent = db.items.filter(i => (i.type || 'rental') === 'rental').reduce((s, i) => s + Number(i.qty), 0);
+      document.getElementById("statRentals").textContent = db.sales.filter(s => s.status !== "completed").length;
+
+      const customerDueMap = {};
+      db.sales.forEach(s => {
+        const due = s.dueAmount !== undefined ? s.dueAmount : ((s.billAmount || s.total) - (s.advanceAmount || 0));
+        if(due > 0) {
+          const key = s.customerId || s.customerName;
+          if(!customerDueMap[key]) {
+            customerDueMap[key] = {
+              customerId: s.customerId,
+              customerName: s.customerName,
+              totalDue: 0,
+              items: [],
+              date: s.date
+            };
+          }
+          customerDueMap[key].totalDue += due;
+          customerDueMap[key].items.push(getInvoiceItemSummary(s));
+        }
+      });
+
+      const pendingCustomersList = Object.values(customerDueMap);
+      const totalPendingSum = pendingCustomersList.reduce((sum, c) => sum + c.totalDue, 0);
+
+      document.getElementById("statPending").textContent = "₹" + totalPendingSum.toLocaleString("en-IN");
+
+      const reminderList = document.getElementById("reminderList");
+      if(pendingCustomersList.length === 0) {
+        reminderList.innerHTML = `<p style="text-align: center; color: #64748b; padding: 15px; margin:0;">No pending customer payments.</p>`;
+      } else {
+        reminderList.innerHTML = pendingCustomersList.map(c => `
+          <div class="reminder-item">
+            <div>
+              <strong style="color:var(--navy-dark); font-size:15px;">${c.customerName}</strong><br>
+              <small style="color:#475569;">Items: ${c.items.join(", ")} &middot; Date: ${c.date}</small>
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--card-red); font-size:16px;">Due: ₹${c.totalDue.toLocaleString("en-IN")}</strong><br>
+              <button class="pay-btn" style="margin-top:4px;" onclick="switchTab('payments'); document.getElementById('payCustSelect').value='${c.customerId}';">Collect Payment</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      const paySelect = document.getElementById("payCustSelect");
+      if(paySelect) {
+        if(pendingCustomersList.length) {
+          paySelect.innerHTML = pendingCustomersList.map(c => 
+            `<option value="${c.customerId}">${c.customerName} — Total Due: ₹${c.totalDue.toLocaleString("en-IN")}</option>`
+          ).join("");
+        } else {
+          paySelect.innerHTML = `<option value="">No customers with due balances</option>`;
+        }
+      }
+
+      const q = (document.getElementById("custSearch")?.value || "").toLowerCase();
+      const filteredCust = db.customers.filter(c => c.name.toLowerCase().includes(q) || c.phone.includes(q));
+      document.getElementById("customerListContainer").innerHTML = filteredCust.length ? filteredCust.map(c => `
+        <div class="list-item">
+          <div><strong>${c.name}</strong><br><small style="color:#64748b;">${c.phone || 'No primary number'} ${c.phone2 ? ' / ' + c.phone2 : ''} · ${c.address || ''}</small></div>
+          <div>
+            <button class="submit-btn" style="padding:4px 10px; font-size:12px; margin-right:5px;" onclick="openCustModal('${c.id}')">Edit</button>
+            <button class="danger-btn" onclick="deleteCust('${c.id}')">Delete</button>
+          </div>
+        </div>
+      `).join("") : "<p style='padding:15px; color:#64748b;'>No customers found.</p>";
+
+      const iq = (document.getElementById("itemSearch")?.value || "").toLowerCase();
+      const filteredItems = db.items.filter(i => i.name.toLowerCase().includes(iq));
+      document.getElementById("itemListContainer").innerHTML = filteredItems.length ? filteredItems.map(i => `
+        <div class="list-item">
+          <div>
+            <strong>${i.name}</strong> 
+            <span style="font-size:11px; background:${i.type==='sale'?'#fef3c7':'#dbeafe'}; color:${i.type==='sale'?'#92400e':'#1e40af'}; padding:2px 8px; border-radius:10px; font-weight:bold;">
+              ${i.type==='sale'?'Non-Returnable Product':'Returnable Service'}
+            </span><br>
+            <small style="color:#64748b;">Stock: ${i.qty} · Rate/Price: ₹${i.rate}</small>
+          </div>
+          <div>
+            <button class="submit-btn" style="padding:4px 10px; font-size:12px; margin-right:5px;" onclick="openItemModal('${i.id}')">Edit</button>
+            <button class="danger-btn" onclick="deleteItem('${i.id}')">Delete</button>
+          </div>
+        </div>
+      `).join("") : "<p style='padding:15px; color:#64748b;'>No items found.</p>";
+
+      document.getElementById("salesListContainer").innerHTML = db.sales.length ? db.sales.map(s => {
+        const due = s.dueAmount !== undefined ? s.dueAmount : ((s.billAmount || s.total) - (s.advanceAmount || 0));
+        const summary = getInvoiceItemSummary(s);
+        const hasUnreturned = s.items && s.items.some(i => (i.qty - (i.returnedQty || 0)) > 0);
+        return `
+          <div class="list-item">
+            <div>
+              <strong>${s.customerName}</strong><br>
+              <small style="color:#475569;">${summary}</small><br>
+              <small style="color:#64748b;">Final Bill: ₹${s.billAmount || s.total} · Advance: ₹${s.advanceAmount || 0} · Out Date: ${s.date}</small>
+              ${(s.items || []).flatMap(it => (it.returnEvents || []).map(ev => `<small style="display:block;color:#166534;">${it.name}: ${ev.qty} returned on ${prettyDate(ev.returnDate)} · ${ev.rentalDays} rental day(s)</small>`)).join("")}
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--navy-dark); font-size:15px;">Total: ₹${(s.billAmount || s.total).toLocaleString("en-IN")}</strong><br>
+              <small style="color:${due > 0 ? 'var(--card-red)' : 'var(--card-green)'}; font-weight:bold;">
+                ${due > 0 ? 'Pending: ₹' + due : 'Fully Paid'}
+              </small><br>
+              ${hasUnreturned ? `<button class="return-btn" style="margin-top:5px;" onclick="openReturnModal('${s.id}')">Receive Return</button>` : `<span style="font-size:11px; color:#16a34a; font-weight:bold;">Fully Returned</span>`}
+            </div>
+          </div>
+        `;
+      }).join("") : "<p style='padding:15px; color:#64748b;'>No invoices issued yet.</p>";
+
+      const payContainer = document.getElementById("paymentHistoryContainer");
+      if(payContainer) {
+        payContainer.innerHTML = db.payments.length ? db.payments.map(p => `
+          <div class="list-item">
+            <div>
+              <strong>${p.customerName}</strong><br>
+              <small style="color:#64748b;">Date: ${p.date}</small>
+            </div>
+            <div><strong style="color:var(--card-green); font-size:15px;">+ ₹${p.amount.toLocaleString("en-IN")}</strong></div>
+          </div>
+        `).join("") : "<p style='padding:15px; color:#64748b; text-align:center;'>No payment collections recorded yet.</p>";
+      }
+
+      renderReports();
+    }
+
+    try { const b = localStorage.getItem(BASIS_KEY); if(b) document.getElementById("reportBasis").value = b; } catch {}
+    populateYearOptions();
+    document.getElementById("custSearch")?.addEventListener("input", renderAll);
+    document.getElementById("itemSearch")?.addEventListener("input", renderAll);
+
+    renderAll();
+
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+    }
+  </script>
+
+  <!-- FIREBASE ENGINE & MULTI-DEVICE SYNC SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      enableIndexedDbPersistence, 
+      collection, 
+      onSnapshot, 
+      doc, 
+      setDoc, 
+      deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0smMQjlB0EGJXPzNwe12bJoTInXH_VGY",
+      authDomain: "swarali-machinery.firebaseapp.com",
+      projectId: "swarali-machinery",
+      storageBucket: "swarali-machinery.firebasestorage.app",
+      messagingSenderId: "109651851452",
+      appId: "1:109651851452:web:100fb753327464e0f8b8b9",
+      measurementId: "G-8FY5JEY8GQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const cloudDb = getFirestore(app);
+
+    enableIndexedDbPersistence(cloudDb).catch((err) => {
+      console.warn("Persistence note:", err.code);
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-screen')?.classList.add('hidden');
+        document.getElementById('app-screen')?.classList.remove('hidden');
+        document.getElementById('logoutBtn')?.classList.remove('hidden');
+
+        listenToCollection('customers');
+        listenToCollection('items');
+        listenToCollection('invoices');
+        listenToCollection('payments');
+      } else {
+        document.getElementById('login-screen')?.classList.remove('hidden');
+        document.getElementById('app-screen')?.classList.add('hidden');
+        document.getElementById('logoutBtn')?.classList.add('hidden');
+      }
+    });
+
+    function listenToCollection(colName) {
+      onSnapshot(collection(cloudDb, colName), (snapshot) => {
+        const cloudData = [];
+        snapshot.forEach((doc) => cloudData.push({ id: doc.id, ...doc.data() }));
+
+        if (colName === 'customers') db.customers = cloudData;
+        if (colName === 'items') db.items = cloudData;
+        if (colName === 'invoices') db.sales = cloudData;
+        if (colName === 'payments') db.payments = cloudData;
+
+        saveDB();
+      });
+    }
+
+    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      const errorText = document.getElementById('login-error');
+
+      try {
+        errorText.textContent = '';
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (err) {
+        console.error('Swarali Firebase login error:', err);
+        errorText.textContent = `Login failed: ${err.code || err.message || 'Unknown Firebase error'}`;
+      }
+    });
+
+    window.firebaseAuth = {
+      login: (email, pass) => signInWithEmailAndPassword(auth, email, pass),
+      logout: () => signOut(auth)
+    };
+
+    window.firebaseDB = {
+      saveItem: (col, id, data) => setDoc(doc(cloudDb, col, id), data, { merge: true }),
+      saveItemsBatch: async (col, records) => {
+        // Firestore allows up to 500 writes per batch; use a conservative 350.
+        const batch = writeBatch(cloudDb);
+        records.forEach(record => {
+          const ref = doc(cloudDb, col, record.id);
+          const data = { ...record };
+          delete data.id;
+          batch.set(ref, data, { merge: true });
+        });
+        await batch.commit();
+      },
+      removeItem: (col, id) => deleteDoc(doc(cloudDb, col, id))
+    };
+  </script>
+</body>
+</html>
