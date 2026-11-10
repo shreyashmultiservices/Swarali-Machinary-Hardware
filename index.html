@@ -1592,14 +1592,13 @@
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyD0smMQjlB0EGJXPzNwe12bJoTInXH_VGY",,
+      apiKey: "AIzaSyD0smMQjlB0EGJXPzNwe12bJoTInXH_VGY",
       authDomain: "swarali-machinery.firebaseapp.com",
-projectId: "swarali-machinery",
-storageBucket: "swarali-machinery.firebasestorage.app",
-messagingSenderId: "109651851452",
-appId: "1:109651851452:web:100fb753327464e0f8b8b9",
-measurementId: "G-8FY5JEY8GQ",
-      appId: "PASTE_YOUR_NEW_FIREBASE_APP_ID"
+      projectId: "swarali-machinery",
+      storageBucket: "swarali-machinery.firebasestorage.app",
+      messagingSenderId: "109651851452",
+      appId: "1:109651851452:web:100fb753327464e0f8b8b9",
+      measurementId: "G-8FY5JEY8GQ"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -1651,7 +1650,8 @@ measurementId: "G-8FY5JEY8GQ",
         errorText.textContent = '';
         await signInWithEmailAndPassword(auth, email, pass);
       } catch (err) {
-        errorText.textContent = 'Invalid email or password. Please try again.';
+        console.error('Swarali Firebase login error:', err);
+        errorText.textContent = `Login failed: ${err.code || err.message || 'Unknown Firebase error'}`;
       }
     });
 
